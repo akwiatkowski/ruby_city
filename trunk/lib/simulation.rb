@@ -39,6 +39,10 @@ class Simulation
 
   def generate_html_report
     report = ""
+    report += "<h1>RubyCity</h1>"
+    report += "<h2>HTML report @ year #{@year}</h2>"
+    report += "<hr />"
+
     (0...(@cities.size)).each do |i|
       report += "City ID: <b>#{i}</b><br />"
       report += @cities[i].generate_html_report

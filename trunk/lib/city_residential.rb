@@ -6,7 +6,7 @@ class CityResidential < CityBaseClass
   BUILDING_COST_RESIDENTIAL = 5
   START_POPULATION = 0
   START_CAPACITY = 1000
-  GROWTH_INERTIAL_COEF = 0.6
+  GROWTH_INERTIAL_COEF = 0.1
 
   attr_reader :residential_capacity, :population
 
@@ -22,16 +22,29 @@ class CityResidential < CityBaseClass
   end
 
   # calculate and set happines to current situation
-  # from 0 to 100
+  # from 0 to 1
   def happiness
-    # TODO związane z podatkami miasta, zanieczyszczeniem, ilością wolnego miejsca, ...
-    50
+    h = 0.5
+
+    # f(x) = 2∙(1−x^0.4), kmplot
+    tax_coef = 2 * (1 - @city.finance.tax ** 0.6)
+    h *= tax_coef
+    # f(x) =1 − x^20
+    capacity_coef = 1 - (@population.to_f / @residential_capacity.to_f) ** 20
+    h *= capacity_coef
+
+    # f(x) = (0.5+0.5∙(2∙x−1)^3)
+    # f(x) = 1/(1+(x∙3)^3)
+
+    return 1.0 if h > 1.0
+    return 0.0 if h < 0.0
+    return h
   end
 
   def growth
     # TODO
     max_possible = @residential_capacity - @population
-    growth = (max_possible.to_f * GROWTH_INERTIAL_COEF) * happiness.to_f / 100.0
+    growth = (max_possible.to_f * GROWTH_INERTIAL_COEF) * happiness.to_f
     @growth = growth.floor
     return @growth
   end
