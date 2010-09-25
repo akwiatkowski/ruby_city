@@ -4,20 +4,36 @@ require 'yaml'
 
 class City
 
-  attr_reader :finance, :residential
+  attr_reader :finance, :residential, :simulation
 
-  def initialize
+  def initialize( simulation )
+    @simulation = simulation
     @residential = CityResidential.new( self )
     @finance = CityFinance.new( self )
 
+    @hash = {
+      :residential => @residential,
+      :finance => @finance
+    }
+
+    @balance = 0.0
+
     # years from creating this city
-    @years_from_start = 0
+    @year = 0
 
   end
 
   # Calculate all factors in next year
   def next_year
-    @years_from_start += 1
+    @residential.next_year
+
+    @year += 1
+  end
+
+  # Add taxes, ...
+  def add_income( income )
+    @balance += income
+    return @balance
   end
 
   # Information about city status
@@ -28,14 +44,11 @@ class City
 
   # HTML report for debug
   def generate_html_report
-    return self.to_yaml.gsub(/\n/, "<br />")
-
     report = ""
-    (0...(@cities.size)).each do |i|
-      report += "City: <b>#{i}</b><br />"
-      report += @cities[i].generate_html_report
-      report += "<hr /><br />"
+    @hash.each_value do |v|
+      report += v.generate_html_report + "<br />"
     end
+    return report
   end
 
 

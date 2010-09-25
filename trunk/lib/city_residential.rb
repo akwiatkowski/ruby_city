@@ -4,13 +4,16 @@ require 'lib/city_base_class'
 
 class CityResidential < CityBaseClass
   BUILDING_COST_RESIDENTIAL = 5
+  START_POPULATION = 0
+  START_CAPACITY = 1000
+  GROWTH_INERTIAL_COEF = 0.6
 
   attr_reader :residential_capacity, :population
 
   def initialize( *args )
     super( *args )
-    @residential_capacity = 0
-    @population = 0
+    @residential_capacity = START_CAPACITY
+    @population = START_POPULATION
   end
 
   # accessor
@@ -19,9 +22,58 @@ class CityResidential < CityBaseClass
   end
 
   # calculate and set happines to current situation
+  # from 0 to 100
   def happiness
     # TODO związane z podatkami miasta, zanieczyszczeniem, ilością wolnego miejsca, ...
+    50
   end
+
+  def growth
+    # TODO
+    max_possible = @residential_capacity - @population
+    growth = (max_possible.to_f * GROWTH_INERTIAL_COEF) * happiness.to_f / 100.0
+    @growth = growth.floor
+    return @growth
+  end
+
+  def next_year
+    pay_taxes
+    increase_population
+  end
+
+  def generate_html_report
+    "
+<h2>Residential</h2>
+Residential Capacity: <b>#{@residential_capacity}</b><br />
+Population: <b>#{@population}</b><br />
+Paid tax <b>#{@tax_income}</b><br />
+Growth <b>#{growth}</b><br />
+    "
+  end
+
+  private
+
+  # calculate and increase city balance
+  def pay_taxes
+    # was taxes paid to city?
+    if @tax_income_for_year == @city.simulation.year
+      # yes!
+    else
+      # no
+      #puts @city.finance.tax
+      #puts @population
+      @tax_income = @city.finance.tax * @population
+      @city.add_income( @tax_income )
+      @tax_income_for_year = @city.simulation.year
+    end
+    return @tax_income
+  end
+
+  # increase amount of residents
+  def increase_population
+    @population += growth
+  end
+  
 
 
 

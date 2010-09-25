@@ -4,6 +4,9 @@ require 'lib/simulation_web_server'
 require 'yaml'
 
 class Simulation
+
+  attr_reader :year
+
   def initialize
     @server = SimulationServer.new( self, SimulationServer::PORT )
     @server.start
@@ -12,9 +15,9 @@ class Simulation
     @web_server.start
 
     @cities = Array.new
-    @cities << City.new
+    @cities << City.new( self )
     
-    @years_from_start = 0
+    @year = 0
   end
 
   def process_server_command( command )
@@ -28,7 +31,8 @@ class Simulation
         c.info
         c.next_year
       end
-      
+
+      @year += 1
       sleep(1)
     end
   end
@@ -36,7 +40,7 @@ class Simulation
   def generate_html_report
     report = ""
     (0...(@cities.size)).each do |i|
-      report += "City: <b>#{i}</b><br />"
+      report += "City ID: <b>#{i}</b><br />"
       report += @cities[i].generate_html_report
       report += "<hr /><br />"
     end
