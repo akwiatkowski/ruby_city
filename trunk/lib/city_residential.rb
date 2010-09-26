@@ -72,8 +72,10 @@ Happiness <b>#{happiness}</b><br />
     "
   end
 
+
+
   def process_http_request( action, param )
-    # TODO przemyślić kwestie warstwy/separacji
+    # TODO before finish change http comm to self protocol
     case action
     when 'increase_capacity' then increase_capacity( param )
     else false
@@ -82,7 +84,12 @@ Happiness <b>#{happiness}</b><br />
 
   def generate_html_action
     str = ""
-    str += "<a href=\"/#{city.id}/residential/increase_capacity/10\">Buy 10 residential capacity</a><br />"
+
+    str += "Increase residential capacity: "
+    str += "<a href=\"/#{city.id}/residential/increase_capacity/10\">10</a> "
+    str += "<a href=\"/#{city.id}/residential/increase_capacity/50\">50</a> "
+    str += "<a href=\"/#{city.id}/residential/increase_capacity/100\">100</a> "
+    str += "<a href=\"/#{city.id}/residential/increase_capacity/200\">200</a> "
 
     return str
   end
@@ -97,6 +104,9 @@ Happiness <b>#{happiness}</b><br />
       @residential_capacity += amount
     end
   end
+
+
+
 
   private
 
