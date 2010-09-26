@@ -1,4 +1,5 @@
 require 'lib/city_base_class'
+require 'lib/math_utils'
 
 # All information about people living in city
 
@@ -8,7 +9,7 @@ class CityResidential < CityBaseClass
   START_CAPACITY = 1000
   GROWTH_INERTIAL_COEF = 0.1
 
-  attr_reader :residential_capacity, :population
+  attr_reader :residential_capacity, :population, :tax_income, :city
 
   def initialize( *args )
     super( *args )
@@ -24,28 +25,34 @@ class CityResidential < CityBaseClass
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness
-    h = 0.5
+    h = 1.0
 
     # f(x) = 2∙(1−x^0.4), kmplot
-    tax_coef = 2 * (1 - @city.finance.tax ** 0.6)
+    tax_coef = (1 - @city.finance.tax ** 0.6)
     h *= tax_coef
+
     # f(x) =1 − x^20
     capacity_coef = 1 - (@population.to_f / @residential_capacity.to_f) ** 20
     h *= capacity_coef
 
-    # f(x) = (0.5+0.5∙(2∙x−1)^3)
-    # f(x) = 1/(1+(x∙3)^3)
-
-    return 1.0 if h > 1.0
-    return 0.0 if h < 0.0
-    return h
+    return MathUtils.nonlinear_a( h )
   end
 
   def growth
     # TODO
     max_possible = @residential_capacity - @population
-    growth = (max_possible.to_f * GROWTH_INERTIAL_COEF) * happiness.to_f
+    growth = (max_possible.to_f * GROWTH_INERTIAL_COEF) * ( happiness.to_f - 0.5 )
     @growth = growth.floor
+
+    # safety for <0 population
+    if @growth < -1 * @population
+      @growth
+    end
+    # safety for >MAX population
+    if @population + @growth > @residential_capacity
+      @growth = @residential_capacity - @population
+    end
+
     return @growth
   end
 
@@ -57,11 +64,38 @@ class CityResidential < CityBaseClass
   def generate_html_report
     "
 <h2>Residential</h2>
-Residential Capacity: <b>#{@residential_capacity}</b><br />
-Population: <b>#{@population}</b><br />
-Paid tax <b>#{@tax_income}</b><br />
+Residential Capacity: <b>#{residential_capacity}</b><br />
+Population: <b>#{population}</b><br />
+Paid tax <b>#{tax_income}</b><br />
 Growth <b>#{growth}</b><br />
+Happiness <b>#{happiness}</b><br />
     "
+  end
+
+  def process_http_request( action, param )
+    # TODO przemyślić kwestie warstwy/separacji
+    case action
+    when 'increase_capacity' then increase_capacity( param )
+    else false
+    end
+  end
+
+  def generate_html_action
+    str = ""
+    str += "<a href=\"/#{city.id}/residential/increase_capacity/10\">Buy 10 residential capacity</a><br />"
+
+    return str
+  end
+
+  def increase_capacity( amount )
+    amount = amount.to_i
+    cost = BUILDING_COST_RESIDENTIAL * amount.to_i
+    if city.finance.balance < cost
+      return false
+    else
+      city.finance.decrease_balance( cost )
+      @residential_capacity += amount
+    end
   end
 
   private
@@ -76,7 +110,7 @@ Growth <b>#{growth}</b><br />
       #puts @city.finance.tax
       #puts @population
       @tax_income = @city.finance.tax * @population
-      @city.add_income( @tax_income )
+      @city.finance.increase_balance( @tax_income, :residential_tax )
       @tax_income_for_year = @city.simulation.year
     end
     return @tax_income

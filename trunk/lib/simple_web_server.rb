@@ -8,7 +8,7 @@ module SimpleWebServer
   end
 
   # Output of server
-  def process_request
+  def process_request( connection )
     return "OK"
   end
 
@@ -38,7 +38,7 @@ module SimpleWebServer
 
       header = "HTTP/1.1 200/OK\r\nContent-type: text/html\r\n\r\n"
 
-      connection.print header + process_request
+      connection.print header + process_request( connection )
       connection.close
     end
   end

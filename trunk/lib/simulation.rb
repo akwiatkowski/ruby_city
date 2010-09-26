@@ -15,20 +15,30 @@ class Simulation
     @web_server.start
 
     @cities = Array.new
-    @cities << City.new( self )
+    @cities << City.new( self, @cities.size )
     
     @year = 0
+
+    Thread.abort_on_exception =  true
   end
 
   def process_server_command( command )
     return 'test'
   end
 
+  def process_http_request( city_id, division_name, action, param )
+    city = @cities[city_id]
+    division = city.instance_variable_get("@#{division_name}".to_sym)
+
+    # http://localhost:8080/0/residential/increase/10
+    division.process_http_request( action, param )
+  end
+
   def start_simulation
     loop do
 
       @cities.each do |c|
-        c.info
+        #c.info
         c.next_year
       end
 

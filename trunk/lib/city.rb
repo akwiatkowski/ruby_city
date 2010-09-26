@@ -4,10 +4,12 @@ require 'yaml'
 
 class City
 
-  attr_reader :finance, :residential, :simulation
+  attr_reader :finance, :residential, :simulation, :id
 
-  def initialize( simulation )
+  def initialize( simulation, id )
     @simulation = simulation
+    @id = id
+
     @residential = CityResidential.new( self )
     @finance = CityFinance.new( self )
 
@@ -15,8 +17,6 @@ class City
       :residential => @residential,
       :finance => @finance
     }
-
-    @balance = 0.0
 
     # years from creating this city
     @year = 0
@@ -30,12 +30,6 @@ class City
     @year += 1
   end
 
-  # Add taxes, ...
-  def add_income( income )
-    @balance += income
-    return @balance
-  end
-
   # Information about city status
   def info
     puts self.to_yaml
@@ -47,6 +41,7 @@ class City
     report = ""
     @hash.each_value do |v|
       report += v.generate_html_report + "<br />"
+      report += v.generate_html_action + "<br />"
     end
     return report
   end
