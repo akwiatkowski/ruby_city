@@ -1,0 +1,23 @@
+---
+- :name: "Coal powerplant"
+  :tech_level: 0
+  # cost to buy
+  :cost: 1000
+  # yearly cost
+  :maint_cost: 10
+  # amount of pollution when idle
+  :pollution_idle: 10
+  # amount of pollution at full power
+  :pollution_full: 50
+
+- :name: "Fusion powerplant"
+  :tech_level: 1000
+  # cost to buy
+  :cost: 10_000_000
+  # yearly cost
+  :maint_cost: 5_000
+  # amount of pollution when idle
+  :pollution_idle: 4
+  # amount of pollution at full power
+  :pollution_full: 5
+

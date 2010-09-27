@@ -1,3 +1,5 @@
+require 'yaml'
+
 # Base class for all divisions
 
 class CityBaseClass
@@ -7,8 +9,21 @@ class CityBaseClass
     @city = city
   end
 
+  def generate_html_report
+    str = ""
+    str += "<h2>#{self.class.to_s}</h2>"
+    str += "<i>generate_html_report not implemented</i><br />"
+    str += "#{self.inspect.gsub(/</,"&lt;").gsub(/>/,"&rt;")}"
+    return str
+    #return "<i>#{self.class.to_s} - generate_html_report not implemented</i><br />"
+  end
+
   # Some classes does not have action links
   def generate_html_action
     return ''
   end
+
+  def next_year
+  end
+  
 end

@@ -1,5 +1,7 @@
 require 'lib/city_residential'
 require 'lib/city_finance'
+require 'lib/city_infrastructure_energy'
+require 'lib/city_infrastructure_education'
 require 'yaml'
 
 class City
@@ -12,11 +14,22 @@ class City
 
     @residential = CityResidential.new( self )
     @finance = CityFinance.new( self )
+    @energy = CityInfrastructureEnergy.new( self )
+    @education = CityInfrastructureEducation.new( self )
 
     @hash = {
       :residential => @residential,
-      :finance => @finance
+      :finance => @finance,
+      :energy => @energy,
+      :education => @education
     }
+
+    @array = [
+      @residential,
+      @finance,
+      @energy,
+      @education
+    ]
 
     # years from creating this city
     @year = 0
@@ -25,7 +38,10 @@ class City
 
   # Calculate all factors in next year
   def next_year
-    @residential.next_year
+    #@residential.next_year
+    @array.each do |div|
+      div.next_year
+    end
 
     @year += 1
   end

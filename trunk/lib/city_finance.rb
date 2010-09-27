@@ -12,6 +12,8 @@ class CityFinance < CityBaseClass
     super( *args )
     @balance = DEFAULT_BALACE
     @tax = 0.1
+    # array for all earnings and expenditures
+    @current_operatons = []
   end
 
   def generate_html_report
@@ -59,14 +61,58 @@ Tax: <b>#{@tax}</b><br />
 
   # TODO use special object for amount, so it should be hard to use this fuction
   # not within proper methods
-  def increase_balance( amount, why = :unknown )
-    @balance += amount
-    return @balance
+  #def increase_balance( amount, why = :unknown )
+  #  @balance += amount
+  #  return @balance
+  #end
+
+  def increase_balance_tax( amount, type = :unknown )
+    @current_operatons << {:amount => amount, :type => type}
+    return true
   end
 
-  def decrease_balance( amount, why = :unknown )
-    @balance -= amount
-    return @balance
+  #def decrease_balance( amount, why = :unknown )
+  #  @balance -= amount
+  #  return @balance
+  #end
+
+  # Calculate balance from all registered operations
+  # Done only at the enf of year
+  def process_operation
+    balance_change = 0.0
+    # sum up all amount earning
+    @current_operatons.each do |op|
+      if not op[:amount].nil? and op[:amount] >= 0.0
+        balance_change += op[:amount]
+      end
+    end
+    # sum up all amount expenditures
+    @current_operatons.each do |op|
+      if not op[:amount].nil? and op[:amount] < 0.0
+        balance_change += op[:amount]
+      end
+    end
+
+    # sum up percentage earning - probably none :]
+    percent_up = 0.0
+    @current_operatons.each do |op|
+      if not op[:percent].nil? and op[:percent] >= 0.0
+        percent_up += op[:percent]
+      end
+    end
+    # sum up percentage exp. - like education, healtcare, ...
+    percent_down = 0.0
+    @current_operatons.each do |op|
+      if not op[:percent].nil? and op[:percent] < 0.0
+        percent_down += op[:percent]
+      end
+    end
+
+    balance_change *= (1 + percent_up.to_f / 100.0)
+    balance_change *= (1 - percent_up.to_f / 100.0)
+
+    @balance += balance_change
   end
+
 
 end

@@ -120,7 +120,7 @@ Happiness <b>#{happiness}</b><br />
       #puts @city.finance.tax
       #puts @population
       @tax_income = @city.finance.tax * @population
-      @city.finance.increase_balance( @tax_income, :residential_tax )
+      @city.finance.increase_balance_tax( @tax_income, :residential_tax )
       @tax_income_for_year = @city.simulation.year
     end
     return @tax_income
