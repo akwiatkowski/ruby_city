@@ -16,6 +16,10 @@ class CityFinance < CityBaseClass
     @current_operatons = []
   end
 
+  def next_year
+    process_operation
+  end
+
   def generate_html_report
     "
 <h2>Finance</h2>
@@ -66,8 +70,22 @@ Tax: <b>#{@tax}</b><br />
   #  return @balance
   #end
 
-  def increase_balance_tax( amount, type = :unknown )
+  # Operation is processed now
+  def add_finance_operation_now( amount, type = :unknown )
+    # TODO if not enough money?
+    @balance += amount
+    @current_operatons << {:amount_done => amount, :amount => 0.0, :type => type}
+    return true
+  end
+
+  # Operation will be processed at end of year
+  def add_finance_operation( amount, type = :unknown )
     @current_operatons << {:amount => amount, :type => type}
+    return true
+  end
+
+  def add_finance_percentage_operation( percent, type = :unknown )
+    @current_operatons << {:percent => percent, :type => type}
     return true
   end
 
@@ -110,6 +128,8 @@ Tax: <b>#{@tax}</b><br />
 
     balance_change *= (1 + percent_up.to_f / 100.0)
     balance_change *= (1 - percent_up.to_f / 100.0)
+
+    @current_operatons = Array.new
 
     @balance += balance_change
   end
