@@ -14,10 +14,10 @@ class CityFinance < CityBaseClass
     @tax = 0.1
     # array for all earnings and expenditures
     @current_operatons = []
-    @last_year_operations = []
+    @last_turn_operations = []
   end
 
-  def next_year
+  def next_turn
     process_operation
   end
 
@@ -28,11 +28,11 @@ Balance: <b>#{@balance}</b><br />
 Tax: <b>#{@tax}</b><br />
     "
 
-    # last year operations
-    str += "<div style=\"font-size: 10px;\"><ul>"
-    @last_year_operations.each do |op|
+    # last turn operations
+    str += "<div style=\"font-size: 11px;\"><ul>"
+    @last_turn_operations.each do |op|
       str += "<li> "
-      str += "+" if op[:amount] >= 0.0
+      str += "+" if op[:amount] > 0.0
       str += "#{op[:amount]} "
       str += "(#{op[:percent]} %)" unless op[:percent].nil?
       str += " - #{op[:type]} </li>"
@@ -92,7 +92,7 @@ Tax: <b>#{@tax}</b><br />
     return true
   end
 
-  # Operation will be processed at end of year
+  # Operation will be processed at end of turn
   def add_finance_operation( amount, type = :unknown )
     @current_operatons << {:amount => amount, :type => type}
     return true
@@ -108,22 +108,22 @@ Tax: <b>#{@tax}</b><br />
   #  return @balance
   #end
 
-  # Return all operations from last year with chosen type
-  def find_last_year_operation( type )
+  # Return all operations from last turn with chosen type
+  def find_last_turn_operation( type )
     # clone - can not change
-    return @last_year_operations.select{|op| op[:type] == type }.clone
+    return @last_turn_operations.select{|op| op[:type] == type }.clone
   end
 
   # Return sum of all operations, amount and percentage
-  def find_last_year_operation_flow( type )
-    ops = find_last_year_operation( type )
+  def find_last_turn_operation_flow( type )
+    ops = find_last_turn_operation( type )
     puts ops.to_yaml
     sum = 0 + ops.collect{|op| op[:amount]}.sum.to_i
     return sum
   end
 
   # Calculate balance from all registered operations
-  # Done only at the enf of year
+  # Done only at the enf of turn
   def process_operation
 
     # sum up all amount earning
@@ -174,7 +174,7 @@ Tax: <b>#{@tax}</b><br />
     balance_change = amount_balance_change + amount_earnings_by_percent + amount_expenditures_by_percent
 
     # move all operation to history
-    @last_year_operations = @current_operatons
+    @last_turn_operations = @current_operatons
     # clean list
     @current_operatons = Array.new
     # calculate current balance

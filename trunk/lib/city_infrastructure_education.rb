@@ -14,20 +14,20 @@ class CityInfrastructureEducation < CityInfrastructure
     @education_level = Options::EDUCATION_LEVEL_WITHOUT_SPENING
   end
 
-  def next_year
+  def next_turn
     pay_funding
     modify_education_level
   end
 
   def pay_funding
-    @city.finance.add_finance_percentage_operation( @funding_percent, :education_funding )
+    @city.finance.add_finance_percentage_operation( -1.0 * @funding_percent, :education_funding )
   end
 
   def modify_education_level
     @education_level = Options::EDUCATION_EVAL_NEW_LEVEL.call(
       @education_level,
       @funding_percent,
-      city.finance.find_last_year_operation_flow( :education_funding ),
+      city.finance.find_last_turn_operation_flow( :education_funding ),
       @residential.population )
 
     if @education_level > 100

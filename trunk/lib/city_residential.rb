@@ -56,7 +56,7 @@ class CityResidential < CityBaseClass
     return @growth
   end
 
-  def next_year
+  def next_turn
     pay_taxes
     increase_population
   end
@@ -113,7 +113,7 @@ Happiness <b>#{happiness}</b><br />
   # calculate and increase city balance
   def pay_taxes
     # was taxes paid to city?
-    if @tax_income_for_year == @city.simulation.year
+    if @tax_income_time == @city.simulation.time
       # yes!
     else
       # no
@@ -121,7 +121,7 @@ Happiness <b>#{happiness}</b><br />
       #puts @population
       @tax_income = @city.finance.tax * @population
       @city.finance.add_finance_operation( @tax_income, :residential_tax )
-      @tax_income_for_year = @city.simulation.year
+      @tax_income_time = @city.simulation.time
     end
     return @tax_income
   end

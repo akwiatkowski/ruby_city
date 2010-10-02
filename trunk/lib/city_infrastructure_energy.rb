@@ -2,6 +2,8 @@ require 'lib/city_infrastructure'
 
 class CityInfrastructureEnergy < CityInfrastructure
 
+  attr_reader :city
+
   def initialize( *args )
     super( *args )
     @powerplants = []
@@ -10,8 +12,7 @@ class CityInfrastructureEnergy < CityInfrastructure
 
   # Calculate energy created by power plants
   def energy
-    # TODO
-    return 0
+    Options::ENERGY_NEEDED_PER_CITY.call( city, city.simulation )
   end
 
   def maintance_cost

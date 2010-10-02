@@ -24,7 +24,7 @@ class CityBaseClass
     return ''
   end
 
-  def next_year
+  def next_turn
   end
   
 end

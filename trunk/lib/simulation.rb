@@ -6,7 +6,7 @@ require 'yaml'
 
 class Simulation
 
-  attr_reader :year
+  attr_reader :time
 
   def initialize
     @server = SimulationServer.new( self, SimulationServer::PORT )
@@ -18,7 +18,7 @@ class Simulation
     @cities = Array.new
     @cities << City.new( self, @cities.size )
     
-    @year = 0
+    @time = Time.now
 
     Thread.abort_on_exception =  true
   end
@@ -40,10 +40,10 @@ class Simulation
 
       @cities.each do |c|
         #c.info
-        c.next_year
+        c.next_turn
       end
 
-      @year += 1
+      @time += Options::SIMULATION_TURN_TIME
       sleep(1)
     end
   end
@@ -51,7 +51,7 @@ class Simulation
   def generate_html_report
     report = ""
     report += "<h1>RubyCity</h1>"
-    report += "<h2>HTML report @ year #{@year}</h2>"
+    report += "<h2>HTML report @ time #{@time.to_s}</h2>"
     report += "<hr />"
 
     (0...(@cities.size)).each do |i|

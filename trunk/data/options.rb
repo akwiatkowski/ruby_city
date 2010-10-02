@@ -1,6 +1,8 @@
 # Options are stored in .rb file (class) because yaml can not store Proc objects
 
 class Options
+  SIMULATION_TURN_TIME = 24*3600
+
   # education level at start
   EDUCATION_INITIAL_LEVEL = 0.0
   # education level without spending
@@ -24,4 +26,20 @@ class Options
 
     next_year_level
   }
+
+
+
+  # return MW needed for city
+  ENERGY_NEEDED_PER_CITY = Proc.new{ |city, simulation|
+    
+    # modification for season
+    # f(x) =1+1.5∙(0.5−x/12)^2
+
+    season_coef = 1.5 * ( 0.5 - simulation.time.yday / 365 ) ** 2
+
+    nominal_power = city.residential.population * 0.002
+
+    nominal_power * season_coef
+  }
+
 end

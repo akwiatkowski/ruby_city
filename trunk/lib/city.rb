@@ -33,18 +33,18 @@ class City
     ]
 
     # years from creating this city
-    @year = 0
+    @time = @simulation.time
 
   end
 
   # Calculate all factors in next year
-  def next_year
+  def next_turn
     #@residential.next_year
     @array.each do |div|
-      div.next_year
+      div.next_turn
     end
 
-    @year += 1
+    @time = @simulation.time
   end
 
   # Information about city status
