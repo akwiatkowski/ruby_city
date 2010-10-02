@@ -1,8 +1,6 @@
 require 'lib/city_infrastructure'
 
 class CityInfrastructureEducation < CityInfrastructure
-  INITIAL_EDUCATION_FUNDING_PERCENT = 0
-  STANDARD_EDUCATION_LEVEL = 0
   EDUCATION_LEVEL_CHANGE_SPEED_COEF = 0.2
 
   attr_reader :education_level, :funding_percent
@@ -10,10 +8,10 @@ class CityInfrastructureEducation < CityInfrastructure
   def initialize( *args )
     super( *args )
     # 0 - 100 of taxes
-    @funding_percent = INITIAL_EDUCATION_FUNDING_PERCENT
+    @funding_percent = Options::EDUCATION_INITIAL_LEVEL
     @residential = @city.residential
     # 0 - 100
-    @education_level = STANDARD_EDUCATION_LEVEL
+    @education_level = Options::EDUCATION_LEVEL_WITHOUT_SPENING
   end
 
   def next_year
@@ -26,9 +24,11 @@ class CityInfrastructureEducation < CityInfrastructure
   end
 
   def modify_education_level
-    target_educational_level = @funding_percent
-    level_change = (target_educational_level - @education_level).to_f * EDUCATION_LEVEL_CHANGE_SPEED_COEF.to_f
-    @education_level += level_change
+    @education_level = Options::EDUCATION_EVAL_NEW_LEVEL.call(
+      @education_level,
+      @funding_percent,
+      city.finance.find_last_year_operation_flow( :education_funding ),
+      @residential.population )
 
     if @education_level > 100
       @education_level = 100
@@ -51,32 +51,32 @@ Education level: <b>#{education_level}</b><br />
 
   
 
-    def process_http_request( action, param )
-      # TODO before finish change http comm to self protocol
-      case action
-      when 'set_funding' then set_funding( param )
-      else false
+  def process_http_request( action, param )
+    # TODO before finish change http comm to self protocol
+    case action
+    when 'set_funding' then set_funding( param )
+    else false
+    end
+  end
+  
+  def generate_html_action
+    str = ""
+  
+    str += "Set funding: "
+  
+    [-5, -2, -1, 1, 2, 5].each do |a|
+      if ( funding_percent + a ) >= 0 and (funding_percent + a ) <= 100
+        str += "<a href=\"/#{city.id}/education/set_funding/#{funding_percent + a}\">#{funding_percent + a} %</a> "
       end
     end
   
-    def generate_html_action
-      str = ""
+    return str
+  end
   
-      str += "Set funding: "
-  
-      [-5, -2, -1, 1, 2, 5].each do |a|
-        if ( funding_percent + a ) >= 0 and (funding_percent + a ) <= 100
-          str += "<a href=\"/#{city.id}/education/set_funding/#{funding_percent + a}\">#{funding_percent + a} %</a> "
-        end
-      end
-  
-      return str
+  def set_funding( funding_new )
+    if funding_new.to_i >= 0 and funding_new.to_i <= 100
+      @funding_percent = funding_new.to_i
     end
-  
-    def set_funding( funding_new )
-      if funding_new.to_i >= 0 and funding_new.to_i <= 100
-        @funding_percent = funding_new.to_i
-      end
-    end
+  end
 
 end

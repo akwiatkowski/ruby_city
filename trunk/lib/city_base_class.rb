@@ -1,4 +1,5 @@
 require 'yaml'
+require 'data/options'
 
 # Base class for all divisions
 

@@ -2,6 +2,7 @@ require 'lib/city_residential'
 require 'lib/city_finance'
 require 'lib/city_infrastructure_energy'
 require 'lib/city_infrastructure_education'
+require 'lib/utils'
 require 'yaml'
 
 class City

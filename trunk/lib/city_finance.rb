@@ -14,6 +14,7 @@ class CityFinance < CityBaseClass
     @tax = 0.1
     # array for all earnings and expenditures
     @current_operatons = []
+    @last_year_operations = []
   end
 
   def next_year
@@ -21,11 +22,24 @@ class CityFinance < CityBaseClass
   end
 
   def generate_html_report
-    "
+    str = "
 <h2>Finance</h2>
 Balance: <b>#{@balance}</b><br />
 Tax: <b>#{@tax}</b><br />
     "
+
+    # last year operations
+    str += "<div style=\"font-size: 10px;\"><ul>"
+    @last_year_operations.each do |op|
+      str += "<li> "
+      str += "+" if op[:amount] >= 0.0
+      str += "#{op[:amount]} "
+      str += "(#{op[:percent]} %)" unless op[:percent].nil?
+      str += " - #{op[:type]} </li>"
+    end
+    str += "</ul></div>"
+
+    return str
   end
 
 
@@ -94,43 +108,76 @@ Tax: <b>#{@tax}</b><br />
   #  return @balance
   #end
 
+  # Return all operations from last year with chosen type
+  def find_last_year_operation( type )
+    # clone - can not change
+    return @last_year_operations.select{|op| op[:type] == type }.clone
+  end
+
+  # Return sum of all operations, amount and percentage
+  def find_last_year_operation_flow( type )
+    ops = find_last_year_operation( type )
+    puts ops.to_yaml
+    sum = 0 + ops.collect{|op| op[:amount]}.sum.to_i
+    return sum
+  end
+
   # Calculate balance from all registered operations
   # Done only at the enf of year
   def process_operation
-    balance_change = 0.0
+
     # sum up all amount earning
+    amount_earnings = 0.0
     @current_operatons.each do |op|
-      if not op[:amount].nil? and op[:amount] >= 0.0
-        balance_change += op[:amount]
+      if not op[:amount].nil? and op[:amount] >= 0.0 and not true == op[:done]
+        amount_earnings += op[:amount]
+        op[:done] = true
       end
     end
-    # sum up all amount expenditures
+    # sum up all amount expenditures (in negative value)
+    amount_expenditures = 0.0
     @current_operatons.each do |op|
-      if not op[:amount].nil? and op[:amount] < 0.0
-        balance_change += op[:amount]
-      end
-    end
-
-    # sum up percentage earning - probably none :]
-    percent_up = 0.0
-    @current_operatons.each do |op|
-      if not op[:percent].nil? and op[:percent] >= 0.0
-        percent_up += op[:percent]
-      end
-    end
-    # sum up percentage exp. - like education, healtcare, ...
-    percent_down = 0.0
-    @current_operatons.each do |op|
-      if not op[:percent].nil? and op[:percent] < 0.0
-        percent_down += op[:percent]
+      if not op[:amount].nil? and op[:amount] < 0.0 and not true == op[:done]
+        amount_expenditures += op[:amount]
+        op[:done] = true
       end
     end
 
-    balance_change *= (1 + percent_up.to_f / 100.0)
-    balance_change *= (1 - percent_up.to_f / 100.0)
+    # balance change calculated for fixed amounts
+    amount_balance_change = amount_earnings + amount_expenditures
 
+
+    # calculate percentage earnings - probably none :]
+    amount_earnings_by_percent = 0.0
+    @current_operatons.each do |op|
+      if not op[:percent].nil? and op[:percent] >= 0.0 and not true == op[:done]
+        # calculate amount
+        op[:amount] = op[:percent].to_f * amount_balance_change / 100.0
+        op[:amount] = 0.0 if amount_balance_change <= 0.0 # without income can not calculate
+        amount_earnings_by_percent += op[:amount]
+        op[:done] = true
+      end
+    end
+    # sum up percentage exp. - like education, healthcare, ...
+    amount_expenditures_by_percent = 0.0
+    @current_operatons.each do |op|
+      if not op[:percent].nil? and op[:percent] < 0.0 and not true == op[:done]
+        # calculate amount
+        op[:amount] = op[:percent].to_f * amount_balance_change / 100.0
+        op[:amount] = 0.0 if amount_balance_change <= 0.0 # without income can not calculate
+        amount_expenditures_by_percent += op[:amount]
+        op[:done] = true
+      end
+    end
+
+    # summ all operations
+    balance_change = amount_balance_change + amount_earnings_by_percent + amount_expenditures_by_percent
+
+    # move all operation to history
+    @last_year_operations = @current_operatons
+    # clean list
     @current_operatons = Array.new
-
+    # calculate current balance
     @balance += balance_change
   end
 

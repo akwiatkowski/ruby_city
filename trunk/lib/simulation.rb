@@ -1,3 +1,4 @@
+require 'lib/utils'
 require 'lib/city'
 require 'lib/simulation_server'
 require 'lib/simulation_web_server'
