@@ -15,28 +15,39 @@ class CityInfrastructureEnergy < CityInfrastructure
 
     # ecological factor, 0.0 - only costs, 1.0 - only pollution
     @ecological_factor = 0.1
+
+    # percent of potential capacity use, 0 only current, 100 full capacity
+    @potential_capacity_forecast = 20.0
+    # calculate demand some percents higher
+    @power_reserves_percent = 20.0
   end
 
   def next_turn
     unless contract_valid?
       sing_new_contract
     end
+
+    pay_supplier
   end
 
-  # If contract is valid at this moment
-  def contract_valid?
-    return false if contract_to.nil? or contract_to < city.simulation.time
-    return true
+ 
+
+
+
+  # Calculate demand for contract
+  def calculate_contract_power_demand
+    d = energy_demand
+    pd = potential_energy_demand
+
+    # additional power forecast
+    potential_percent_addon = (pd - d).to_f * @potential_capacity_forecast / 100.0
+    demand_with_forecast = d + potential_percent_addon
+
+    demand_with_reserve = demand_with_forecast * ( 100.0 + @power_reserves_percent ) / 100.0
+    return demand_with_reserve
   end
 
-  def sing_new_contract
-    @contract = @ai.select_plants_per_power(
-      potential_energy_demand,
-      @ecological_factor,
-      0.0 # tech level
-    )
-    @contract[:valid_to] = city.simulation.time + Options::ENERGY_CONTRACT_TIME
-  end
+
 
   # Contracted power
   def energy_supply
@@ -81,33 +92,25 @@ Contract to: <b>#{contract_to.to_s_human_date}</b><br />
 
 
 
-  #  def process_http_request( action, param )
-  #    # TODO before finish change http comm to self protocol
-  #    case action
-  #    when 'set_tax' then set_tax( param )
-  #    else false
-  #    end
-  #  end
-  #
-  #  def generate_html_action
-  #    str = ""
-  #
-  #    str += "Set taxes: "
-  #    tax_numeric = (tax * 100).floor
-  #
-  #    [-5, -2, -1, 1, 2, 5].each do |a|
-  #      if ( tax_numeric + a ) >= 0 and (tax_numeric + a ) <= 100
-  #        str += "<a href=\"/#{city.id}/finance/set_tax/#{tax_numeric + a}\">#{tax_numeric + a}</a> "
-  #      end
-  #    end
-  #
-  #    return str
-  #  end
-  #
-  #  def set_tax( tax_new )
-  #    if tax_new.to_i >= 0 and tax_new.to_i <= 100
-  #      @tax = tax_new.to_f / 100.0
-  #    end
-  #  end
+  private
+
+  # If contract is valid at this moment
+  def contract_valid?
+    return false if contract_to.nil? or contract_to < city.simulation.time
+    return true
+  end
+
+  def sing_new_contract
+    @contract = @ai.select_plants_per_power(
+      calculate_contract_power_demand,
+      @ecological_factor,
+      0.0 # tech level
+    )
+    @contract[:valid_to] = city.simulation.time + Options::ENERGY_CONTRACT_TIME
+  end
+
+  def pay_supplier
+    @city.finance.add_finance_operation( -1.0 * daily_cost, :energy_cost )
+  end
 
 end

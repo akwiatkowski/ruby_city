@@ -117,7 +117,6 @@ Tax: <b>#{@tax}</b><br />
   # Return sum of all operations, amount and percentage
   def find_last_turn_operation_flow( type )
     ops = find_last_turn_operation( type )
-    puts ops.to_yaml
     sum = 0 + ops.collect{|op| op[:amount]}.sum.to_i
     return sum
   end
