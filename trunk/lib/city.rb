@@ -7,7 +7,7 @@ require 'yaml'
 
 class City
 
-  attr_reader :finance, :residential, :simulation, :id
+  attr_reader :finance, :residential, :simulation, :energy, :id
 
   def initialize( simulation, id )
     @simulation = simulation

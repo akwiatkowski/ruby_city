@@ -1,7 +1,16 @@
+require 'data/options_residential'
+
 # Options are stored in .rb file (class) because yaml can not store Proc objects
 
 class Options
+  include OptionsResidential
+
   SIMULATION_TURN_TIME = 24*3600
+
+
+
+
+
 
   # education level at start
   EDUCATION_INITIAL_LEVEL = 0.0

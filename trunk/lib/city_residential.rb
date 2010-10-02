@@ -25,17 +25,7 @@ class CityResidential < CityBaseClass
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness
-    h = 1.0
-
-    # f(x) = 2∙(1−x^0.4), kmplot
-    tax_coef = (1 - @city.finance.tax ** 0.6)
-    h *= tax_coef
-
-    # f(x) =1 − x^20
-    capacity_coef = 1 - (@population.to_f / @residential_capacity.to_f) ** 20
-    h *= capacity_coef
-
-    return MathUtils.nonlinear_a( h )
+    return Options::RESIDENTIAL_HAPPINESS.call( self )
   end
 
   def growth
