@@ -1,4 +1,5 @@
 require 'lib/city_infrastructure'
+require 'lib/ai_powerplant'
 
 class CityInfrastructureEnergy < CityInfrastructure
 
@@ -7,8 +8,8 @@ class CityInfrastructureEnergy < CityInfrastructure
   def initialize( *args )
     super( *args )
     @powerplants = []
+    @ai = AiPowerplant.new( self )
   end
-
 
   # Calculate energy created by power plants
   def energy
