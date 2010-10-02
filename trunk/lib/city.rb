@@ -32,9 +32,7 @@ class City
       @education
     ]
 
-    # years from creating this city
-    @time = @simulation.time
-
+    @started_time = @simulation.time
   end
 
   # Calculate all factors in next year

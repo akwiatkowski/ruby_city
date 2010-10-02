@@ -28,6 +28,11 @@ class Options
   }
 
 
+
+  # contract time for energy supplying (in seconds)
+  ENERGY_CONTRACT_TIME = 30 * 24 * 3600
+
+  # MW used per citizen
   ENERGY_MW_USED_PER_PERSON = 0.002
 
   # return MW needed for city
