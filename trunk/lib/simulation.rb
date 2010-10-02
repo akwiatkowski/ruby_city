@@ -51,7 +51,7 @@ class Simulation
   def generate_html_report
     report = ""
     report += "<h1>RubyCity</h1>"
-    report += "<h2>HTML report @ time #{@time.to_s}</h2>"
+    report += "<h2>HTML report @ time #{@time.to_s_human_date}</h2>"
     report += "<hr />"
 
     (0...(@cities.size)).each do |i|

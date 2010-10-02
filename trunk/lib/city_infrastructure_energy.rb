@@ -7,13 +7,34 @@ class CityInfrastructureEnergy < CityInfrastructure
 
   def initialize( *args )
     super( *args )
-    @powerplants = []
+
     @ai = AiPowerplant.new( self )
+
+    # type of fuel/contractor
+    @contract_type = nil
+    # contract is valid to
+    @contract_due = nil
+    # amount of units for contract
+    @contract_units = 0
+  end
+
+  def sing_new_contract
+    @ai.select_plants( 100, 0.0 )
+  end
+
+  # Contracted power
+  def energy
+
   end
 
   # Calculate energy created by power plants
-  def energy
+  def energy_demand
     Options::ENERGY_NEEDED_PER_CITY.call( city, city.simulation )
+  end
+
+  # Calculate energy potential demand (full capacity, winter season)
+  def potential_energy_demand
+    Options::ENERGY_POTENTIAL_DEMAND_PER_CITY.call( city, city.simulation )
   end
 
   def maintance_cost
@@ -24,7 +45,8 @@ class CityInfrastructureEnergy < CityInfrastructure
   def generate_html_report
     "
 <h2>Energy</h2>
-Energy: <b>#{energy}</b><br />
+Energy demand: <b>#{energy_demand}</b><br />
+Potential energy demand: <b>#{potential_energy_demand}</b><br />
 Maintance cost: <b>#{maintance_cost}</b><br />
     "
   end
