@@ -3,7 +3,8 @@ require 'lib/ai_powerplant'
 
 class CityInfrastructureEnergy < CityInfrastructure
 
-  attr_reader :city, :contract, :potential_capacity_forecast, :reserves_percent
+  attr_reader :city, :contract, :potential_capacity_forecast, :reserves_percent,
+    :ecological_factor
 
   def initialize( *args )
     super( *args )
@@ -14,7 +15,7 @@ class CityInfrastructureEnergy < CityInfrastructure
     @contract = {}
 
     # ecological factor, 0.0 - only costs, 1.0 - only pollution
-    @ecological_factor = 0.05
+    @ecological_factor = 0.2
 
     # percent of potential capacity use, 0 only current, 100 full capacity
     @potential_capacity_forecast = 20.0
@@ -94,6 +95,7 @@ Contract calculation capacity forecast: <b>#{potential_capacity_forecast} %</b><
 Contract type: <b>#{contract_type}</b><br />
 Cost daily: <b>#{daily_cost}</b><br />
 Pollution: <b>#{pollution}</b><br />
+Ecological factor: <b>#{ecological_factor}</b><br />
 Contract to: <b>#{contract_to.to_s_human_date}</b><br />
     "
   end
