@@ -1,4 +1,4 @@
-require 'lib/comm_server'
+require './lib/comm_server'
 
 class SimulationServer < CommServer
   PORT = 20001

@@ -1,4 +1,4 @@
-require 'data/options_residential'
+require './data/options_residential'
 
 # Options are stored in .rb file (class) because yaml can not store Proc objects
 

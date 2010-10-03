@@ -1,4 +1,4 @@
-require 'lib/city_workplace'
+require './lib/city_workplace'
 
 class CityCommerce < CityWorkplace
 end

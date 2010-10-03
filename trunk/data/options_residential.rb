@@ -36,8 +36,10 @@ module OptionsResidential
     end
     h *= pollution_coef
 
-    # education factor
-    #TODO
+    # education factor - is only positive happiness modifier
+    edu_coef = 1.0 + residential.city.education.education_level / 100.0
+    h *= edu_coef
+    h = 1.0 if h > 1.0
 
 
     #puts "tax #{tax_coef}, capacity #{capacity_coef}, power #{power_coef}, out #{MathUtils.nonlinear_a( h )}"
@@ -48,7 +50,8 @@ module OptionsResidential
         :tax => tax_coef,
         :capacity => capacity_coef,
         :power_coverage => power_coef,
-        :pollution => pollution_coef
+        :pollution => pollution_coef,
+        :education => edu_coef
       }
     }
   }

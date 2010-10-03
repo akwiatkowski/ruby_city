@@ -1,7 +1,8 @@
-require 'lib/utils'
-require 'lib/city'
-require 'lib/simulation_server'
-require 'lib/simulation_web_server'
+require './lib/utils'
+require './lib/city'
+require './lib/simulation_server'
+require './lib/simulation_web_server'
+require './lib/comm'
 require 'yaml'
 
 class Simulation
@@ -87,12 +88,15 @@ class Simulation
       :cities => @cities,
       :time => @time
     }
-
     File.open( save_path( file ), "w"){ |file| file.puts(data.to_yaml) }
+    #File.open( save_path( file ), "w"){ |file| file.puts Comm.comm_encode( data ) }
   end
 
   def simulation_load( file )
     data = YAML::load_file( save_path( file ) )
+    # f = File.read_file( save_path( file ) )
+    # data = Comm.comm_decode( f )
+
     @cities = data[:cities]
     @time = data[:time]
   end

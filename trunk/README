@@ -1,3 +1,6 @@
 == RubyCity
 
-You should document your project here.
+Framework for city simulation games.
+
+req:
+- Ruby 1.9.1

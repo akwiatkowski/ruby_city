@@ -1,5 +1,5 @@
-require 'lib/city_base_class'
-require 'lib/math_utils'
+require './lib/city_base_class'
+require './lib/math_utils'
 
 # All information about people living in city
 
@@ -25,9 +25,9 @@ class CityResidential < CityBaseClass
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness
-    @happiness_data = Options::RESIDENTIAL_HAPPINESS.call( self )
-    puts @happiness_data[:coefs].inspect
-    return @happiness_data[:happiness]
+    happiness_data = Options::RESIDENTIAL_HAPPINESS.call( self )
+    @happiness_data = happiness_data
+    return happiness_data[:happiness]
   end
 
   def growth

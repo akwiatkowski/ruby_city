@@ -1,4 +1,4 @@
-require 'lib/comm'
+require './lib/comm'
 
 class CommServer < Comm
   

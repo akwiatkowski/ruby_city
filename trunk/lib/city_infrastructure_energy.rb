@@ -1,5 +1,5 @@
-require 'lib/city_infrastructure'
-require 'lib/ai_powerplant'
+require './lib/city_infrastructure'
+require './lib/ai_powerplant'
 
 class CityInfrastructureEnergy < CityInfrastructure
 

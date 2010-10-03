@@ -1,6 +1,6 @@
 # Simple server to show status of game
 
-require 'lib/simple_web_server'
+require './lib/simple_web_server'
 
 class SimulationWebServer
   include SimpleWebServer

@@ -1,4 +1,4 @@
-require 'lib/ai_powerplant'
+require './lib/ai_powerplant'
 @ai = AiPowerplant.new(nil)
 
 (0..20).each do |i|

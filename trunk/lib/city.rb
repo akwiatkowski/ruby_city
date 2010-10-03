@@ -1,14 +1,14 @@
-require 'lib/city_residential'
-require 'lib/city_finance'
-require 'lib/city_infrastructure_energy'
-require 'lib/city_infrastructure_education'
-require 'lib/city_bad_factors'
-require 'lib/utils'
+require './lib/city_residential'
+require './lib/city_finance'
+require './lib/city_infrastructure_energy'
+require './lib/city_infrastructure_education'
+require './lib/city_bad_factors'
+require './lib/utils'
 require 'yaml'
 
 class City
 
-  attr_reader :finance, :residential, :simulation, :energy, :bad_factors,
+  attr_reader :finance, :residential, :simulation, :energy, :education, :bad_factors,
     :id,
     :hash, :array
 

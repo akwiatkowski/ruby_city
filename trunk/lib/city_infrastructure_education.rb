@@ -1,4 +1,4 @@
-require 'lib/city_infrastructure'
+require './lib/city_infrastructure'
 
 class CityInfrastructureEducation < CityInfrastructure
   EDUCATION_LEVEL_CHANGE_SPEED_COEF = 0.2
