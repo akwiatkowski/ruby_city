@@ -26,5 +26,13 @@ class CityBaseClass
 
   def next_turn
   end
+
+  # All division can produce pollution, if some division can not like financial it returns nil
+  def pollution
+    return nil
+  end
+  def pollution_with_info
+    return nil
+  end
   
 end

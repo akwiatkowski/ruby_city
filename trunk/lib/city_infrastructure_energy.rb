@@ -67,6 +67,13 @@ class CityInfrastructureEnergy < CityInfrastructure
     @contract[:total_pollution].to_f
   end
 
+  def pollution_with_info
+    {
+      :amount =>@contract[:total_pollution].to_f,
+      :type => :energy
+    }
+  end
+
   def contract_to
     @contract[:valid_to]
   end
