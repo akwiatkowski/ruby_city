@@ -106,6 +106,7 @@ Contract to: <b>#{contract_to.to_s_human_date}</b><br />
     case action
     when 'set_forecast' then set_potential_capacity_forecast( param )
     when 'set_reserves' then set_power_reserves_percent( param )
+    when 'set_ecological_factor' then set_ecological_factor( param )
     else false
     end
   end
@@ -125,6 +126,12 @@ Contract to: <b>#{contract_to.to_s_human_date}</b><br />
     end
     str += "<br />"
 
+    str += "Set reserves: "
+    [0, 2, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80].each do |a|
+      str += "<a href=\"/#{city.id}/energy/set_ecological_factor/#{a.to_f / 100.0}\">#{a.to_f / 100.0}</a> "
+    end
+    str += "<br />"
+
 
     return str
   end
@@ -138,6 +145,12 @@ Contract to: <b>#{contract_to.to_s_human_date}</b><br />
   def set_power_reserves_percent( p )
     if p.to_f >= 0.0 and p.to_f <= 100.0
       @power_reserves_percent = p.to_f
+    end
+  end
+
+  def set_ecological_factor( f )
+    if f.to_f >= 0.0 and f.to_f <= 1.0
+      @ecological_factor = f.to_f
     end
   end
 

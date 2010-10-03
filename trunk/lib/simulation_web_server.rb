@@ -11,7 +11,9 @@ class SimulationWebServer
 
   def process_request( connection )
     request_ouput = decode_request( connection.gets )
-    @simulation.generate_html_report
+    str = @simulation.generate_html_report
+    str += @simulation.generate_html_action
+    return str
   end
 
   private
@@ -30,9 +32,22 @@ class SimulationWebServer
         action,
         param
       )
-      puts "process request: #{$1}, #{$2}, #{$3}, #{$4}"
-    else
+      puts "process request: #{city_id}, #{division}, #{action}, #{param}"
       puts request
+
+    elsif request =~ /GET \/([^\/]*)\/([^\/]*)\/([^\/ ]*)/ and $1 == "simulation"
+      # simulation request
+      action = $2
+      param = $3
+
+      @simulation.process_http_request_for_simulation(
+        action,
+        param
+      )
+      puts "process simulation request: #{action}, #{param}"
+    else
+
+      puts "bad request, request #{request}"
     end
     
   end

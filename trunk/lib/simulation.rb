@@ -35,6 +35,24 @@ class Simulation
     division.process_http_request( action, param )
   end
 
+  def process_http_request_for_simulation( action, param )
+    # http://localhost:8080/simulation/save/a
+    case action
+    when 'save' then simulation_save( param )
+    when 'load' then simulation_load( param )
+    else false
+    end
+  end
+
+  def generate_html_action
+    str = ""
+    str += "<a href=\"/simulation/save/savegame1\">Save simulation %</a><br /> "
+    str += "<a href=\"/simulation/load/savegame1\">Load simulation %</a><br /> "
+
+    return str
+  end
+
+
   def start_simulation
     loop do
 
@@ -44,7 +62,7 @@ class Simulation
       end
 
       @time += Options::SIMULATION_TURN_TIME
-      sleep(1)
+      sleep( Options::SIMULATION_TURN_REAL_TIME )
     end
   end
 
@@ -60,6 +78,27 @@ class Simulation
       report += "<hr /><br />"
     end
     return report
+  end
+
+  private
+
+  def simulation_save( file )
+    data = {
+      :cities => @cities,
+      :time => @time
+    }
+
+    File.open( save_path( file ), "w"){ |file| file.puts(data.to_yaml) }
+  end
+
+  def simulation_load( file )
+    data = YAML::load_file( save_path( file ) )
+    @cities = data[:cities]
+    @time = data[:time]
+  end
+
+  def save_path( file )
+    "data/saves/#{file}"
   end
 
 

@@ -1,0 +1,77 @@
+# Types of sources used for powerplants
+---
+- :type: :coal
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 10.0
+  # can be used when city tech level is greater than
+  :tech_level: 0.0
+  # cost for power per MW
+  :cost: 2.0
+  # amount of pollution per MW
+  :pollution: 2.0
+
+- :type: :diesel
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 5.0
+  # can be used when city tech level is greater than
+  :tech_level: 0.0
+  # cost for power per MW
+  :cost: 5.0
+  # amount of pollution per MW
+  :pollution: 1.5
+
+- :type: :gas
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 5.0
+  # can be used when city tech level is greater than
+  :tech_level: 0.0
+  # cost for power per MW
+  :cost: 8.0
+  # amount of pollution per MW
+  :pollution: 0.8
+
+- :type: :wind
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 0.5
+  # can be used when city tech level is greater than
+  :tech_level: 0.0
+  # cost for power per MW
+  :cost: 20.0
+  # amount of pollution per MW
+  :pollution: 0.1
+
+- :type: :hydro
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 5.0
+  # can be used when city tech level is greater than
+  :tech_level: 5.0
+  # cost for power per MW
+  :cost: 7.0
+  # amount of pollution per MW
+  :pollution: 0.15
+
+
+- :type: :uranium
+  # quantified amount of power per one 'part of powerplant'
+  :power_per_unit: 200.0
+  # can be used when city tech level is greater than
+  :tech_level: 20.0
+  # cost for power per MW
+  :cost: 0.5
+  # amount of pollution per MW
+  # with 'image' factor
+  :pollution: 0.2
+
+
+
+#- :name: "Fusion powerplant"
+#  :tech_level: 1000
+#  # cost to buy
+#  :cost: 10_000_000
+#  # yearly cost
+#  :maint_cost: 5_000
+#  # amount of pollution when idle
+#  :pollution_idle: 4
+#  # amount of pollution at full power
+#  :pollution_full: 5
+#

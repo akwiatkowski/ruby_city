@@ -62,8 +62,8 @@ class City
   end
 
 
-  
 
+  
 
   #  def next_year
   #    # podatki

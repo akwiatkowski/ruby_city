@@ -5,7 +5,10 @@ require 'data/options_residential'
 class Options
   include OptionsResidential
 
+  # 1 turn in game is ... seconds
   SIMULATION_TURN_TIME = 24*3600
+  # 1 turn in real life is ... seconds
+  SIMULATION_TURN_REAL_TIME = 1
 
 
 
