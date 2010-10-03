@@ -39,6 +39,18 @@ class Options
     next_year_level
   }
 
+  EDUCATION_INCREAMENT_TECH_LEVEL = Proc.new{ |current_edu_level, spending_percent, spending_amount, population|
+    abs_value = ( population * current_edu_level * spending_percent * spending_amount / 1000.0 ).abs
+    #Math.log10( abs_value + 1)
+    #f(x) = log(x^(0.3))/100.0
+    Math.log10( 1 + abs_value ** 0.3)
+  }
+  EDUCATION_UPDATE_TECH_LEVEL = Proc.new{ |current, inc|
+    new_tech_level = current + inc / (current + 1.0)
+    new_tech_level = 0.0 if new_tech_level < 0.0 or new_tech_level.nan?
+    new_tech_level
+  }
+
 
 
   # contract time for energy supplying (in seconds)

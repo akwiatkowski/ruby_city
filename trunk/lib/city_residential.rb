@@ -22,6 +22,17 @@ class CityResidential < CityBaseClass
     return @residential_capacity
   end
 
+   def pollution
+    Options::RESIDENTIAL_CALCULATE_POLLUTION.call( self )
+  end
+
+  def pollution_with_info
+    {
+      :amount => pollution,
+      :type => :residential
+    }
+  end
+
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness

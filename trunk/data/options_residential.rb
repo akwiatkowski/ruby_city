@@ -55,5 +55,10 @@ module OptionsResidential
       }
     }
   }
+
+  RESIDENTIAL_POLLUTION_PER_CITIZEN = 0.001
+  RESIDENTIAL_CALCULATE_POLLUTION = Proc.new{|residential|
+    residential.population * RESIDENTIAL_POLLUTION_PER_CITIZEN
+  }
   
 end

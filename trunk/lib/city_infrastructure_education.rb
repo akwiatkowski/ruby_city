@@ -3,7 +3,7 @@ require './lib/city_infrastructure'
 class CityInfrastructureEducation < CityInfrastructure
   EDUCATION_LEVEL_CHANGE_SPEED_COEF = 0.2
 
-  attr_reader :education_level, :funding_percent
+  attr_reader :education_level, :funding_percent, :tech_level
 
   def initialize( *args )
     super( *args )
@@ -12,15 +12,28 @@ class CityInfrastructureEducation < CityInfrastructure
     @residential = @city.residential
     # 0 - 100
     @education_level = Options::EDUCATION_LEVEL_WITHOUT_SPENING
+    # 0 - inf
+    @tech_level = 0.0
   end
 
   def next_turn
     pay_funding
     modify_education_level
+    increase_tech_level
   end
 
   def pay_funding
     @city.finance.add_finance_percentage_operation( -1.0 * @funding_percent, :education_funding )
+  end
+
+  def increase_tech_level
+    inc_abs = Options::EDUCATION_INCREAMENT_TECH_LEVEL.call(
+      @education_level,
+      @funding_percent,
+      city.finance.find_last_turn_operation_flow( :education_funding ),
+      @residential.population
+    )
+    @tech_level = Options::EDUCATION_UPDATE_TECH_LEVEL.call( @tech_level, inc_abs )
   end
 
   def modify_education_level
@@ -28,7 +41,8 @@ class CityInfrastructureEducation < CityInfrastructure
       @education_level,
       @funding_percent,
       city.finance.find_last_turn_operation_flow( :education_funding ),
-      @residential.population )
+      @residential.population
+    )
 
     if @education_level > 100
       @education_level = 100
@@ -45,6 +59,7 @@ class CityInfrastructureEducation < CityInfrastructure
 <h2>Education</h2>
 Funding: <b>#{funding_percent} %</b><br />
 Education level: <b>#{education_level}</b><br />
+Education level: <b>#{tech_level}</b><br />
     "
   end
 
