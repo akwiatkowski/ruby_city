@@ -46,8 +46,8 @@ class Simulation
 
   def generate_html_action
     str = ""
-    str += "<a href=\"/simulation/save/savegame1\">Save simulation %</a><br /> "
-    str += "<a href=\"/simulation/load/savegame1\">Load simulation %</a><br /> "
+    str += "<a href=\"/simulation/save/savegame1\">Save simulation</a><br /> "
+    str += "<a href=\"/simulation/load/savegame1\">Load simulation</a><br /> "
 
     return str
   end

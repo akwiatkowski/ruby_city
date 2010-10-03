@@ -8,7 +8,8 @@ require 'yaml'
 
 class City
 
-  attr_reader :finance, :residential, :simulation, :energy, :id,
+  attr_reader :finance, :residential, :simulation, :energy, :bad_factors,
+    :id,
     :hash, :array
 
   def initialize( simulation, id )

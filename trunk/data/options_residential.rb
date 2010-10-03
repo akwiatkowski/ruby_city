@@ -13,7 +13,6 @@ module OptionsResidential
     h *= capacity_coef
 
     # power coverage factor
-
     if residential.city.energy.energy_coverage_percent < 100.0
       power_coef = ( ( residential.city.energy.energy_coverage_percent / 100.0 ) ** 0.8 ).to_f
     else
@@ -21,13 +20,37 @@ module OptionsResidential
     end
     h *= power_coef
 
+    # pollution factor per citize and size
+    # citize
+    #f(x) = 1 − 0.3∙log(1+x)
+    pollution_per_citizen = residential.city.bad_factors.pollution.to_f / residential.population.to_f
+    pollution_per_capacity = residential.city.bad_factors.pollution.to_f / residential.residential_capacity.to_f
+    pollution_per_citizen = 0.0 if pollution_per_citizen.nan? or pollution_per_citizen < 0.0
+    pollution_per_capacity = 0.0 if pollution_per_capacity.nan? or pollution_per_capacity < 0.0
+
+    pollution_per_citizen_coef = 1.0 - 0.3 * Math.log( 1.0 + pollution_per_citizen )
+    pollution_per_capacity_coef = 1.0 - 0.4 * Math.log( 1.0 + pollution_per_capacity )
+    pollution_coef = (pollution_per_citizen_coef + pollution_per_capacity_coef) * 0.5
+    if pollution_coef < 0.4
+      pollution_coef = 0.4
+    end
+    h *= pollution_coef
+
     # education factor
     #TODO
 
 
-    puts "tax #{tax_coef}, capacity #{capacity_coef}, power #{power_coef}, out #{MathUtils.nonlinear_a( h )}"
-
-    MathUtils.nonlinear_a( h )
+    #puts "tax #{tax_coef}, capacity #{capacity_coef}, power #{power_coef}, out #{MathUtils.nonlinear_a( h )}"
+    {
+      :happiness => MathUtils.nonlinear_a( h ),
+      :unprocesed => h,
+      :coefs => {
+        :tax => tax_coef,
+        :capacity => capacity_coef,
+        :power_coverage => power_coef,
+        :pollution => pollution_coef
+      }
+    }
   }
   
 end

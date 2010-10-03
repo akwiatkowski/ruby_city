@@ -25,7 +25,9 @@ class CityResidential < CityBaseClass
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness
-    return Options::RESIDENTIAL_HAPPINESS.call( self )
+    @happiness_data = Options::RESIDENTIAL_HAPPINESS.call( self )
+    puts @happiness_data[:coefs].inspect
+    return @happiness_data[:happiness]
   end
 
   def growth
@@ -52,14 +54,23 @@ class CityResidential < CityBaseClass
   end
 
   def generate_html_report
-    "
+    str = "
 <h2>Residential</h2>
 Residential Capacity: <b>#{residential_capacity}</b><br />
 Population: <b>#{population}</b><br />
 Paid tax <b>#{tax_income}</b><br />
 Growth <b>#{growth}</b><br />
-Happiness <b>#{happiness}</b><br />
-    "
+Happiness <b>#{happiness}</b><br />"
+
+    str += "<div style=\"font-size: 11px;\"><ul>"
+    @happiness_data[:coefs].each_pair do |k,v|
+      str += "<li> "
+      str += "#{k.to_s} - #{v}"
+      str += "</li>"
+    end
+    str += "</ul></div>"
+
+    return str
   end
 
 
