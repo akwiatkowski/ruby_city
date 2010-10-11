@@ -22,7 +22,7 @@ class CityResidential < CityBaseClass
     return @residential_capacity
   end
 
-   def pollution
+  def pollution
     Options::RESIDENTIAL_CALCULATE_POLLUTION.call( self )
   end
 
@@ -107,14 +107,20 @@ Happiness <b>#{happiness}</b><br />"
   end
 
   def increase_capacity( amount )
+    return false if amount.to_f < 0.0
+
     amount = amount.to_i
-    cost = BUILDING_COST_RESIDENTIAL * amount.to_i
+    cost = residential_capacity_increase_by_unit_cost * amount.to_i
     if city.finance.balance < cost
       return false
     else
       city.finance.add_finance_operation_now( -cost, :residential_capacity_increased )
       @residential_capacity += amount
     end
+  end
+
+  def residential_capacity_increase_by_unit_cost
+    BUILDING_COST_RESIDENTIAL
   end
 
 

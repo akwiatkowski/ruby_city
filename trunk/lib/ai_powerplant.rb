@@ -1,4 +1,5 @@
 require 'yaml'
+require './data/options'
 
 # Choose which powerplant
 class AiPowerplant

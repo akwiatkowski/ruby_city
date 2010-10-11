@@ -41,12 +41,13 @@ class Simulation
     case action
     when 'save' then simulation_save( param )
     when 'load' then simulation_load( param )
+    when 'show_city' then generate_html_report_for_city( param )
     else false
     end
   end
 
   def generate_html_action
-    str = ""
+    str = "<hr>"
     str += "<a href=\"/simulation/save/savegame1\">Save simulation</a><br /> "
     str += "<a href=\"/simulation/load/savegame1\">Load simulation</a><br /> "
 
@@ -67,7 +68,7 @@ class Simulation
     end
   end
 
-  def generate_html_report
+  def generate_html_report_old
     report = ""
     report += "<h1>RubyCity</h1>"
     report += "<h2>HTML report @ time #{@time.to_s_human_date}</h2>"
@@ -79,6 +80,26 @@ class Simulation
       report += "<hr /><br />"
     end
     return report
+  end
+
+  # Generate list of cities
+  def generate_html_report
+    report = ""
+    report += "<h1>RubyCity</h1>"
+    report += "<h2>HTML report @ time #{@time.to_s_human_date}</h2>"
+    report += "<hr />"
+
+    (0...(@cities.size)).each do |i|
+      report += "<a href=\"/simulation/show_city/#{i}\">City ID: <b>#{i}</b></a><br />"
+    end
+    return report
+  end
+
+  def generate_html_report_for_city( id )
+    id = id.to_i
+
+    city = @cities[id]
+    city.generate_html_report
   end
 
   private

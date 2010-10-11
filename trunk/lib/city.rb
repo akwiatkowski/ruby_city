@@ -1,14 +1,17 @@
+require './lib/utils'
 require './lib/city_residential'
+require './lib/city_industry'
 require './lib/city_finance'
 require './lib/city_infrastructure_energy'
 require './lib/city_infrastructure_education'
 require './lib/city_bad_factors'
-require './lib/utils'
+require './lib/city_capacity_auto_incremental'
 require 'yaml'
 
 class City
 
   attr_reader :finance, :residential, :simulation, :energy, :education, :bad_factors,
+    :capacity_auto_incremental,
     :id,
     :hash, :array
 
@@ -17,25 +20,31 @@ class City
     @id = id
 
     @residential = CityResidential.new( self )
+    @industry = CityIndustry.new( self )
     @finance = CityFinance.new( self )
     @energy = CityInfrastructureEnergy.new( self )
     @education = CityInfrastructureEducation.new( self )
     @bad_factors = CityBadFactors.new( self )
+    @capacity_auto_incremental = CityCapacityAutoIncremental.new( self )
 
     @hash = {
       :residential => @residential,
+      :industry => @industry,
       :finance => @finance,
       :energy => @energy,
       :education => @education,
-      :bad_factors => @bad_factors
+      :bad_factors => @bad_factors,
+      :capacity_auto_incremental => @capacity_auto_incremental
     }
 
     @array = [
       @residential,
+      @industry,
       @finance,
       @energy,
       @education,
-      @bad_factors
+      @bad_factors,
+      @capacity_auto_incremental
     ]
 
     @started_time = @simulation.time
