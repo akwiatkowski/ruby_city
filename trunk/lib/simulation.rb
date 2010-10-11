@@ -3,11 +3,14 @@ require './lib/city'
 require './lib/simulation_server'
 require './lib/simulation_web_server'
 require './lib/comm'
+require './lib/simulation_migrator'
 require 'yaml'
 
 class Simulation
 
-  attr_reader :time
+  attr_reader :time, :cities
+
+  CITIES_COUNT = 2
 
   def initialize
     @server = SimulationServer.new( self, SimulationServer::PORT )
@@ -17,8 +20,12 @@ class Simulation
     @web_server.start
 
     @cities = Array.new
-    @cities << City.new( self, @cities.size )
-    
+    CITIES_COUNT.times do
+      @cities << City.new( self, @cities.size )
+    end
+
+    @migrator = SimulationMigrator.new( self )
+
     @time = Time.now
 
     Thread.abort_on_exception =  true
@@ -64,6 +71,8 @@ class Simulation
       end
 
       @time += Options::SIMULATION_TURN_TIME
+      @migrator.next_turn
+      
       sleep( Options::SIMULATION_TURN_REAL_TIME )
     end
   end

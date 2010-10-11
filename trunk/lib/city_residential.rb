@@ -33,6 +33,12 @@ class CityResidential < CityBaseClass
     }
   end
 
+  # Population change by migration
+  def add_migration( q, type )
+    puts "migration - #{city.id} - #{q} - #{type}"
+    @population += q
+  end
+
   # calculate and set happines to current situation
   # from 0 to 1
   def happiness
