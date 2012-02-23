@@ -1,45 +1,53 @@
-# 
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
- 
+# encoding: utf-8
 
 require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
 require 'rake'
-require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'rake/testtask'
 
-spec = Gem::Specification.new do |s|
-  s.name = 'RubyCity'
-  s.version = '0.0.1'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README', 'LICENSE']
-  s.summary = 'Your summary here'
-  s.description = s.summary
-  s.author = ''
-  s.email = ''
-  # s.executables = ['your_executable_here']
-  s.files = %w(LICENSE README Rakefile) + Dir.glob("{bin,lib,spec}/**/*")
-  s.require_path = "lib"
-  s.bindir = "bin"
+require 'jeweler'
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "ruby_city"
+  gem.homepage = "http://github.com/akwiatkowski/ruby_city"
+  gem.license = "GPLv3"
+  gem.summary = %Q{City simulator}
+  gem.description = %Q{TODO}
+  gem.email = "bobikx@poczta.fm"
+  gem.authors = ["Aleksander Kwiatkowski"]
+  # dependencies defined in Gemfile
+
+  gem.files = FileList[
+    "[A-Z]*", "{bin,generators,lib,test}/**/*"
+  ]
+end
+Jeweler::RubygemsDotOrgTasks.new
+
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
 end
 
-Rake::GemPackageTask.new(spec) do |p|
-  p.gem_spec = spec
-  p.need_tar = true
-  p.need_zip = true
+RSpec::Core::RakeTask.new(:rcov) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rcov = true
 end
 
+task :default => :spec
+
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  files =['README', 'LICENSE', 'lib/**/*.rb']
-  rdoc.rdoc_files.add(files)
-  rdoc.main = "README" # page to start on
-  rdoc.title = "RubyCity Docs"
-  rdoc.rdoc_dir = 'doc/rdoc' # rdoc output folder
-  rdoc.options << '--line-numbers'
-end
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
-Rake::TestTask.new do |t|
-  t.test_files = FileList['test/**/*.rb']
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "simple_metar_parser #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
