@@ -1,6 +1,6 @@
 $:.unshift(File.dirname(__FILE__))
 
-#require 'simulation/simulation'
+require 'simulation/sim_calculation'
 
 module RubyCity
   class Simulation

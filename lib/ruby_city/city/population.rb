@@ -10,8 +10,16 @@ module RubyCity
 
     def to_s
       str = "Population: \n"
-      str += " count: #{count}"
+      str += " count: #{count}\n"
+      str += " capacity: #{capacity}\n"
+
+      str
     end
+
+    def capacity
+      SimCalculation.instance.coeff[:building_residential_capacity] * parent.buildings.residential
+    end
+
 
   end
 end

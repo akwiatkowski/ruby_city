@@ -38,6 +38,7 @@ module RubyCity
       @modules.values.each do |m|
         str += "#{m.to_s}\n"
       end
+      str += "\n"
       return str
     end
 

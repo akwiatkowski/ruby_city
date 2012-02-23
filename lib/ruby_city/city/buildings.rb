@@ -13,5 +13,9 @@ module RubyCity
       str += " residential: #{residential}"
     end
 
+    def build(amount, type = :residential)
+      @residential += amount.to_f
+    end
+
   end
 end

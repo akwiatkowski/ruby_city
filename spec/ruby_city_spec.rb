@@ -27,7 +27,12 @@ describe RubyCity do
     r.name.should == name
   end
 
+  it "can build buildings" do
+    r = RubyCity::City.new
+    r.buildings.build(5.0)
 
+    puts r.to_s
+  end
 
   it "can display city verbose" do
     r = RubyCity::City.new
