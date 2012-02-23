@@ -17,5 +17,13 @@ module RubyCity
       @residential += amount.to_f
     end
 
+    #def population
+    #  parent.population
+    #end
+
+    def residential_capacity_happiness
+      1.0 - (population.space_left / population.capacity)
+    end
+
   end
 end

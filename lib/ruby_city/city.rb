@@ -18,10 +18,22 @@ module RubyCity
 
       # Create dynamically accessors
       @modules.each_key do |k|
+        # add methods to self
         self.instance_variable_set("@#{k}".to_sym, @modules[k])
         self.class.send :define_method, k do
           instance_variable_get("@" + k.to_s)
         end
+
+        # add methods to sub models
+        @modules.each do |m|
+          unless k == m
+            m.instance_variable_set("@#{k}".to_sym, @modules[k])
+            m.class.send :define_method, k do
+              instance_variable_get("@" + k.to_s)
+            end
+          end
+        end
+
       end
     end
 
@@ -30,7 +42,7 @@ module RubyCity
     def reset_city
       @name = options[:name] || "City #{self.object_id}"
     end
-    
+
     attr_reader :name
 
     def to_s

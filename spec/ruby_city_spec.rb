@@ -31,6 +31,10 @@ describe RubyCity do
     r = RubyCity::City.new
     r.buildings.build(5.0)
 
+    r.population.space_left.should == 20
+    r.population.capacity.should == 20
+    r.population.count.should == 0
+
     puts r.to_s
   end
 

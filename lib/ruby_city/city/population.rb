@@ -16,9 +16,16 @@ module RubyCity
       str
     end
 
+    # Space calculated using building capacity
     def capacity
       SimCalculation.instance.coeff[:building_residential_capacity] * parent.buildings.residential
     end
+
+    # Space left
+    def space_left
+      capacity - count
+    end
+
 
 
   end
