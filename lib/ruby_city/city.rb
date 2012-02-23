@@ -2,14 +2,18 @@ $:.unshift(File.dirname(__FILE__))
 
 require 'city/city_base'
 require 'city/population'
+require 'city/buildings'
 
 module RubyCity
   class City
 
     def initialize(_options = { })
       @options = _options
+      reset_city
+
       @modules = {
-        :population => Population.new(self)
+        :population => Population.new(self),
+        :buildings => Buildings.new(self),
       }
 
       # Create dynamically accessors
@@ -19,6 +23,22 @@ module RubyCity
           instance_variable_get("@" + k.to_s)
         end
       end
+    end
+
+    attr_reader :options
+
+    def reset_city
+      @name = options[:name] || "City #{self.object_id}"
+    end
+    
+    attr_reader :name
+
+    def to_s
+      str = "City: #{name}\n"
+      @modules.values.each do |m|
+        str += "#{m.to_s}\n"
+      end
+      return str
     end
 
   end
