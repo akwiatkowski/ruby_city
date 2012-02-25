@@ -1,3 +1,5 @@
+# Abstract class for City submodule
+
 module RubyCity
   class CityBase
 
@@ -14,9 +16,15 @@ module RubyCity
     end
 
     attr_reader :parent
+    alias_method :city, :parent
 
     def to_s
       "Module #{self.class.to_s}"
+    end
+
+    def next_turn
+      #raise Error::NotImplemented
+      raise "Not implemented"
     end
 
   end

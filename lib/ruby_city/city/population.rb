@@ -18,14 +18,30 @@ module RubyCity
 
     # Space calculated using building capacity
     def capacity
-      SimCalculation.instance.coeff[:building_residential_capacity] * parent.buildings.residential
+      SimCalculation.instance.params[:building_residential_capacity] * parent.buildings.residential
     end
+
 
     # Space left
     def space_left
       capacity - count
     end
 
+    def next_turn
+      population_growth_by_turn
+    end
+
+    # Happiness calculated using residential capacity
+    def happiness
+      SimCalculation.instance.calculate_residential_capacity_happiness(capacity, count)
+    end
+
+    private
+
+    # City growth every turn because of happiness up to max capacity
+    def population_growth_by_turn
+      city.happiness
+    end
 
 
   end

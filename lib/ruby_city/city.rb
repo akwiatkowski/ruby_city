@@ -43,6 +43,12 @@ module RubyCity
       @name = options[:name] || "City #{self.object_id}"
     end
 
+    def next_turn
+      modules.each do |m|
+        m.next_turn
+      end
+    end
+
     attr_reader :name
 
     def to_s
@@ -52,6 +58,20 @@ module RubyCity
       end
       str += "\n"
       return str
+    end
+
+    def modules
+      @modules.values
+    end
+
+    def city
+      self
+    end
+
+    # Happiness calculated using every aspect
+    def happiness
+      # TODO nice way to add new modules which calculate own happiness modificator
+      city.population.happiness
     end
 
   end

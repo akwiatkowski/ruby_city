@@ -18,7 +18,7 @@ describe RubyCity do
     r.buildings.should be_kind_of RubyCity::Buildings
 
     r.buildings.residential.should be_kind_of(Float)
-    r.buildings.residential.should == 0.0
+    r.buildings.residential.should == RubyCity::SimCalculation.instance.params[:initial_buildings_residential]
   end
 
   it "can set name" do
@@ -30,9 +30,10 @@ describe RubyCity do
   it "can build buildings" do
     r = RubyCity::City.new
     r.buildings.build(5.0)
+    r.buildings.residential.should == RubyCity::SimCalculation.instance.params[:initial_buildings_residential] + 5.0
 
-    r.population.space_left.should == 20
-    r.population.capacity.should == 20
+    r.population.space_left.should == 60
+    r.population.capacity.should == 60
     r.population.count.should == 0
 
     puts r.to_s
