@@ -29,13 +29,6 @@ describe RubyCity::SimCalculation do
       end
     end
 
-    #it "show h. per occup." do
-    #  (1..20).each do |i|
-    #    r = @c.calculate_residential_capacity_happiness(10, i)
-    #    puts r
-    #  end
-    #end
-
   end
 
 end

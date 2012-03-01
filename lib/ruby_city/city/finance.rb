@@ -13,6 +13,7 @@ module RubyCity
     def to_s
       str = "Finance: \n"
       str += " money: #{money}\n"
+      str += " tax: #{tax}\n"
 
       str
     end
