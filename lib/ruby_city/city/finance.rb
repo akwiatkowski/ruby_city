@@ -17,26 +17,28 @@ module RubyCity
       str
     end
 
-    # Happiness calculated using residential capacity
+    # Happiness calculated using tax
     def happiness
       SimCalculation.instance.calculate_tax_happiness(tax)
     end
 
     def next_turn
-      calculate_tax
+      account_tax
     end
 
+    # Total income by population from city
     def population_income
-      0
-      #self.
+      SimCalculation.instance.calculate_population_income(city.population.count)
     end
 
-    private
-
+    # Tax paid by population
     def calculate_tax
       population_income * tax
     end
 
+    private
+
+    # Collect and account tax from population
     def account_tax
       @money += calculate_tax
     end
