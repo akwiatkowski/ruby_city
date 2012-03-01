@@ -3,6 +3,7 @@ $:.unshift(File.dirname(__FILE__))
 require 'city/city_base'
 require 'city/population'
 require 'city/buildings'
+require 'city/finance'
 
 module RubyCity
   class City
@@ -12,8 +13,9 @@ module RubyCity
       reset_city
 
       @modules = {
-        :population => Population.new(self),
-        :buildings => Buildings.new(self),
+        population: Population.new(self),
+        buildings: Buildings.new(self),
+        finance: Finance.new(self)
       }
 
       # Create dynamically accessors

@@ -4,14 +4,17 @@ module RubyCity
   class Population < CityBase
     def init
       @count = 0
+      @last_count = @count
     end
 
-    attr_reader :count
+    # Population count, and count in previous turn
+    attr_reader :count, :last_count
 
     def to_s
       str = "Population: \n"
       str += " count: #{count}\n"
       str += " capacity: #{capacity}\n"
+      str += " happiness: #{happiness}\n"
 
       str
     end
@@ -40,7 +43,8 @@ module RubyCity
 
     # City growth every turn because of happiness up to max capacity
     def population_growth_by_turn
-      city.happiness
+      @last_count = @count
+      @count += SimCalculation.instance.calculate_population_growth(capacity, count, city.happiness)
     end
 
 

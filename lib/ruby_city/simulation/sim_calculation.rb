@@ -15,10 +15,21 @@ module RubyCity
       }
     end
 
+    # Calculate happiness for residential capacity
     def calculate_residential_capacity_happiness(capacity, current_population)
       space_left = capacity - current_population
       h = 1.0 - 0.5*(current_population / (capacity + 0.5))
       n(h)
+    end
+
+    # Calculate happiness for residential capacity
+    def calculate_population_growth(capacity, current_population, happiness)
+      space_left = capacity - current_population
+      h = happiness - 0.5
+      sign_change = 1.0
+      sign_change = -1.0 if space_left < 0 and h < 0
+      g = h * space_left * sign_change
+      return g
     end
 
     attr_reader :params

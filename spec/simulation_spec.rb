@@ -15,9 +15,12 @@ describe RubyCity::Simulation do
     @s.build_city(name: 'City')
     @c = @s.cities.first
 
-    @s.next_turn
-    @c.population.capacity > 0
-    @c.population.count > 0
+    5.times do
+      @s.next_turn
+    end
+    @c.population.capacity.should > 0
+    @c.population.count.should > 0
+
     puts @c.to_s
   end
 end
