@@ -3,12 +3,17 @@ $:.unshift(File.dirname(__FILE__))
 module RubyCity
   class Finance < CityBase
     def init
+      @transactions = Array.new
       @money = 0
       @tax = 0.1
     end
 
     # City money
-    attr_reader :money, :tax
+    attr_reader :money, :tax, :transactions
+
+    def tax_transaction
+      transactions.select{|t| t[:type] == :tax}.first
+    end
 
     def to_s
       str = "Finance: \n"
@@ -41,7 +46,11 @@ module RubyCity
 
     # Collect and account tax from population
     def account_tax
-      @money += calculate_tax
+      tax = calculate_tax
+      @transactions << {type: :tax, amount: tax}
+      @money += tax
+
+      return tax
     end
 
   end
