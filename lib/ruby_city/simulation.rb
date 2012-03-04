@@ -13,7 +13,7 @@ module RubyCity
 
     attr_reader :cities, :turn, :outside_world
 
-    def build_city(options = {})
+    def build_city(options = { })
       @cities << City.new(options)
     end
 
@@ -23,6 +23,8 @@ module RubyCity
         c.next_turn
       end
       @turn += 1
+
+      outside_world.register_migration
     end
 
   end
