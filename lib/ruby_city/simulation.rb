@@ -8,11 +8,10 @@ module RubyCity
     def initialize
       @cities = Array.new
       @turn = 0
+      @outside_world = OutsideWorld.new(self)
     end
 
-    attr_reader :cities
-
-    attr_reader :turn
+    attr_reader :cities, :turn, :outside_world
 
     def build_city(options = {})
       @cities << City.new(options)

@@ -20,10 +20,16 @@ describe RubyCity::SimCalculation do
         r = @c.calculate_tax_happiness(h[:tax])
 
         if h[:higher]
+          unless r > h[:higher]
+            puts "Error :(", h.inspect
+          end
           r.should > h[:higher]
         end
 
         if h[:lower]
+          unless r < h[:lower]
+            puts "Error :(", h.inspect
+          end
           r.should < h[:lower]
         end
       end

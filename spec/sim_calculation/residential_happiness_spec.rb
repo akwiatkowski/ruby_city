@@ -19,10 +19,16 @@ describe RubyCity::SimCalculation do
         r = @c.calculate_residential_capacity_happiness(h[:capacity], h[:pop])
 
         if h[:higher]
+          unless r > h[:higher]
+            puts "Error :(", h.inspect
+          end
           r.should > h[:higher]
         end
 
         if h[:lower]
+          unless r < h[:lower]
+            puts "Error :(", h.inspect
+          end
           r.should < h[:lower]
         end
       end
