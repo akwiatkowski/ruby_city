@@ -5,6 +5,9 @@ module RubyCity
     def init
       @count = 0
       @last_count = @count
+
+      # other things which modify happiness
+      @happiness_mods = Hash.new
     end
 
     # Population count, and count in previous turn
@@ -14,7 +17,8 @@ module RubyCity
       str = "Population: \n"
       str += " count: #{count}\n"
       str += " capacity: #{capacity}\n"
-      str += " happiness: #{happiness}\n"
+      str += " residential happiness: #{residential_happiness}\n"
+      str += " happiness w infr.: #{happiness}\n"
 
       str
     end
@@ -43,12 +47,32 @@ module RubyCity
     end
 
     def next_turn
+      # reset this factor
+      @happiness_coeff = 1.0
+
       population_growth_by_turn
     end
 
     # Happiness calculated using residential capacity
-    def happiness
+    def residential_happiness
       SimCalculation.instance.calculate_residential_capacity_happiness(capacity, count)
+    end
+
+    def happiness
+      residential_happiness * happiness_coeff
+    end
+
+    def modify_happiness(_type, _factor)
+      @happiness_mods[_type] = _factor
+    end
+
+    # Current happiness modificator/factor/coefficient
+    def happiness_coeff
+      @happiness_coeff = 1.0
+      @happiness_mods.values.each do |_mod|
+        @happiness_coeff *= _mod
+      end
+      return @happiness_coeff
     end
 
     private

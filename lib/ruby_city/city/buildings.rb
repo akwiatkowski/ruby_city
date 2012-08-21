@@ -4,6 +4,7 @@ module RubyCity
   class Buildings < CityBase
     def init
       @residential = SimCalculation.instance.params[:initial_buildings_residential]
+      @infrastructures = Infrastructure.build_all_infrastructures(city)
     end
 
     attr_reader :residential
@@ -11,6 +12,11 @@ module RubyCity
     def to_s
       str = "Buildings: \n"
       str += " residential: #{residential}"
+      str = "Infrastructures: #{@infrastructures.size}\n"
+      @infrastructures.each do |inf|
+        str += inf.to_s
+      end
+      return str
     end
 
     def build(amount, type = :residential)
@@ -30,7 +36,9 @@ module RubyCity
     end
 
     def next_turn
-      # TODO
+      @infrastructures.each do |inf|
+        inf.next_turn
+      end
     end
 
   end

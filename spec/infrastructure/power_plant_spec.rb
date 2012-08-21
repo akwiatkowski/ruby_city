@@ -9,6 +9,12 @@ describe RubyCity::PowerPlant do
 
   it "create sample powerplant" do
     @p = RubyCity::PowerPlant.new(@c)
+    # puts RubyCity::Infrastructure.infrastructures.inspect
+  end
+
+  it "check powerplant cost after 10 turns" do
+    @s.next_turn(10)
+    puts @s.cities.first.to_s
   end
 
 end

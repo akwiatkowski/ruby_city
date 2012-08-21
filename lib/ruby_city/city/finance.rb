@@ -46,11 +46,11 @@ module RubyCity
       @last_turn_transactions[type] || 0.0
     end
 
-    private
-
     def account_operation(type, amount)
       @turn_transactions << { type: type.to_s.to_sym, amount: amount }
     end
+
+    private
 
     # Collect and account tax from population
     def account_tax
