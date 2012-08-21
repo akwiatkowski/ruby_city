@@ -4,6 +4,7 @@ require 'city/city_base'
 require 'city/population'
 require 'city/buildings'
 require 'city/finance'
+require 'city/infrastructure'
 
 module RubyCity
   class City

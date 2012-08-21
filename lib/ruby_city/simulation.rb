@@ -18,13 +18,16 @@ module RubyCity
     end
 
     # Advance turn/time for one unit
-    def next_turn
-      @cities.each do |c|
-        c.next_turn
-      end
-      @turn += 1
+    def next_turn(_turns = 1)
+      _turns.times do
+        # next turn please
+        @cities.each do |c|
+          c.next_turn
+        end
+        @turn += 1
 
-      outside_world.register_migration
+        outside_world.register_migration
+      end
     end
 
   end
