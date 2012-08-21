@@ -17,9 +17,11 @@ describe RubyCity::Population do
   end
 
   it "should autobuild residential capacity" do
-    @s.next_turn(5)
-    puts @c.finance.last_turn_income
-
+    loop do
+      @s.next_turn(1)
+      sleep 0.05
+      puts @c.finance.last_turn_income
+    end
   end
 
 end
