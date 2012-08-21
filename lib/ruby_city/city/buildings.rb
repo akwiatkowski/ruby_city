@@ -39,6 +39,20 @@ module RubyCity
       @infrastructures.each do |inf|
         inf.next_turn
       end
+
+      # build stuff after turn
+      auto_build
+    end
+
+    private
+
+    # Check money income within last turn and try to spend it
+    def auto_build
+      # residential
+      _surplus = city.finance.last_turn_income
+      _money_residential = SimCalculation.instance.calculate_auto_build_residential_spending(_surplus)
+      _residential_cost = SimCalculation.instance.params[:building_cost][:residential]
+
     end
 
   end

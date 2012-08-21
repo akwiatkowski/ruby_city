@@ -50,6 +50,11 @@ module RubyCity
       @turn_transactions << { type: type.to_s.to_sym, amount: amount }
     end
 
+    # Money income for lat turn
+    def last_turn_income
+      return @last_turn_transactions.values.inject{|sum,v| sum + v }.to_f
+    end
+  
     private
 
     # Collect and account tax from population
