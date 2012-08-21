@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RubyCity::Finance do
+describe RubyCity::Population do
   before :each do
     @s = RubyCity::Simulation.new
     @s.build_city(name: 'City')

@@ -22,9 +22,9 @@ module RubyCity
       "Module #{self.class.to_s}"
     end
 
+    # Everything that is executed after next turn
     def next_turn
-      #raise Error::NotImplemented
-      raise "Not implemented"
+      raise NotImplementedError
     end
 
   end

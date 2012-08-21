@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(File.dirname(__FILE__)) + '/spec_helper')
+require 'spec_helper'
 
 describe RubyCity::SimCalculation do
   before :each do
