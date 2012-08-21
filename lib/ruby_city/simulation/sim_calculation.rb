@@ -26,14 +26,26 @@ module RubyCity
       n(h)
     end
 
-    # Calculate happiness for residential capacity
-    def calculate_population_growth(capacity, current_population, happiness)
+    # Calculate possible immigration
+    def calculate_population_immigration(capacity, current_population, happiness)
       space_left = capacity - current_population
       h = happiness - 0.5
       sign_change = 1.0
       sign_change = -1.0 if space_left < 0 and h < 0
       g = h * space_left * sign_change
       return g
+    end
+
+    # Calculate possible immigration
+    def calculate_population_biological_growth(current_population, happiness)
+      # TODO add test
+      _min = 0.02
+      _max = 0.15
+      # TODO some nonlinear please
+      coeff = (happiness - 0.2) * 0.2
+      coeff = _min if coeff < _min
+      coeff = _max if coeff > _max
+      (coeff * current_population).to_f.floor
     end
 
     def calculate_population_income(current_population)

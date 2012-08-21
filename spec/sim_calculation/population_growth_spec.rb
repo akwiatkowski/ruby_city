@@ -20,7 +20,7 @@ describe RubyCity::SimCalculation do
 
     h_defs.each_with_index do |h, i|
       it "happiness #{i}" do
-        r = @c.calculate_population_growth(h[:capacity], h[:pop], h[:happiness])
+        r = @c.calculate_population_immigration(h[:capacity], h[:pop], h[:happiness])
 
         if h[:higher]
           unless r > h[:higher]

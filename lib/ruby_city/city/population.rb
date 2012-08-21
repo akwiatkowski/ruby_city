@@ -24,10 +24,22 @@ module RubyCity
       SimCalculation.instance.params[:building_residential_capacity] * parent.buildings.residential
     end
 
-
     # Space left
     def space_left
       capacity - count
+    end
+
+    def possible_immigration
+      SimCalculation.instance.calculate_population_immigration(capacity, count, city.happiness)
+    end
+
+    def add_immigration(outside_world, amount)
+      raise ArgumentError unless outside_world.class == OutsideWorld
+      @count += amount
+    end
+
+    def possible_growth
+      SimCalculation.instance.calculate_population_biological_growth(count, city.happiness)
     end
 
     def next_turn
@@ -41,12 +53,10 @@ module RubyCity
 
     private
 
-    # City growth every turn because of happiness up to max capacity
+    # Biological growth of population
     def population_growth_by_turn
-      @last_count = @count
-      @count += SimCalculation.instance.calculate_population_growth(capacity, count, city.happiness)
+      @count += possible_growth
     end
-
 
   end
 end

@@ -15,5 +15,9 @@ describe RubyCity::Finance do
     @c.finance.tax_transaction.should be_nil
     @s.next_turn
     @c.finance.tax_transaction.should_not be_nil
+
+    tax_transaction = @c.finance.tax_transaction
+    tax = tax_transaction[:amount]
+    tax.should >= 0.0
   end
 end

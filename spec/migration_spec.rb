@@ -19,6 +19,8 @@ describe RubyCity::OutsideWorld do
     @s.outside_world.migration_array.should be_kind_of(Array)
     @s.outside_world.migration_array.size.should == @s.cities.size
 
+
+
   end
 
 end
